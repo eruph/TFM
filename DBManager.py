@@ -13,6 +13,9 @@ class DBManager:
         self.connection.close()
 
     def __create_special_tables(self):
-        pass
+        with open("sql/create_base_tables.sql","r") as f:
+            self.cursor.execute(f.read())
+            self.connection.commit()
+            self.connection.close()
 
     
