@@ -4,7 +4,7 @@ CREATE TABLE tagless
 	path TEXT NOT NULL,
 	name TEXT NOT NULL
 );
-
+--
 CREATE TABLE tags
 (
 	id INTEGER PRIMARY KEY,
