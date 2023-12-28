@@ -4,7 +4,11 @@ import os
 
 class CommandShell:
     def __init__(self):
-        self.commands = {}
+
+        #every command is repsented with lambda that takes list of argument(even if command doesn't require any additional data)
+        self.commands = {
+            "quit": lambda args: sys.exit()
+        }
         
     def __run_interactively(self):
         while True:
@@ -12,7 +16,8 @@ class CommandShell:
             if command not in self.commands.keys():
                 print("command '{}' doesn't exist!".format(command))
             else:
-                pass #extract args and run self.commands[command]
+                command, *arguments = command.split(" ")
+                self.commands[command](arguments)
     def __run_cli(self):
         pass
 
