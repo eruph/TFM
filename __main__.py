@@ -1,2 +1,6 @@
+from command_shell import *
+
+
 if __name__ == '__main__':
-    pass
+    shell = CommandShell()
+    shell.run()
