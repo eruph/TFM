@@ -1,5 +1,6 @@
 import sys
 import os
+from operator import *
 
 class CommandShell:
     def __init__(self):
@@ -7,6 +8,8 @@ class CommandShell:
         self.commands = {
             "quit": lambda args: sys.exit()
         }
+
+        #TODO: add operator's commands to self.commands
     
     def __run_interactively(self):
         ''' get user's input, then process command and print response'''
