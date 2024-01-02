@@ -9,23 +9,28 @@ class CommandShell:
             "quit": lambda args: sys.exit()
         }
 
+        #create common operator and add all commands to shell's available ones
         self.operator = Operator()
         for key in self.operator.commands.keys():
             self.commands[key] = self.operator.commands[key]
-    
+
+    def __execute_if_possible(self,command,arguments):
+        if command not in self.commands.keys():
+            print("command '{}' doesn't exist!".format(command))
+        else:
+            self.commands[command](arguments)
+
     def __run_interactively(self):
         ''' get user's input, then process command and print response'''
         while True:
             command = input(">>")
             command, *arguments = command.split(" ")
-            if command not in self.commands.keys():
-                print("command '{}' doesn't exist!".format(command))
-            else:
-                self.commands[command](arguments)
+            self.__execute_if_possible(command,arguments)
     def __run_cli(self):
         '''parse command line arguments, execute command and quit then'''
-        pass
-
+        command, *arguments = sys.argv[1:]
+        self.__execute_if_possible(command,arguments)
+        
     def guard(fn):
         '''decorator to catch ctrl-C and other interruptions'''
         def inner(self):
