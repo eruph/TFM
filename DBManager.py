@@ -21,7 +21,19 @@ class DBManager:
             self.cursor.execute(req1)
             self.cursor.execute(req2)
             self.connection.commit()
-            self.connection.close()
         print("tfm.db has been created!")
+
+    def get_tagless_max(self):
+        self.cursor.execute("SELECT MAX(id) FROM tagless")
+        result = self.cursor.fetchall()
+        if result[0][0] is None:
+            return 0
+        else:
+            return result[0][0]
+
+    def add_tagless_item(self,id:int,path:str,name:str):
+        self.cursor.execute("INSERT INTO tagless (id, path, name) VALUES({}, '{}', '{}')".format(id,path,name))
+        self.connection.commit()
+        
 
     
