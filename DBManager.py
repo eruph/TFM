@@ -23,7 +23,7 @@ class DBManager:
             self.connection.commit()
         print("tfm.db has been created!")
 
-    def get_tagless_max(self):
+    def get_tagless_max(self) -> int:
         self.cursor.execute("SELECT MAX(id) FROM tagless")
         result = self.cursor.fetchall()
         if result[0][0] is None:
@@ -31,9 +31,22 @@ class DBManager:
         else:
             return result[0][0]
 
-    def add_tagless_item(self,id:int,path:str,name:str):
+    def add_tagless_item(self,id:int,path:str,name:str) -> None:
         self.cursor.execute("INSERT INTO tagless (id, path, name) VALUES({}, '{}', '{}')".format(id,path,name))
         self.connection.commit()
+
+    def does_table_exist(self, table:str) -> bool:
+        if table == "tagless": return True#this one obviously exists 
+
+        #if there is no such table None is returned.
+        self.cursor.execute("SELECT name FROM tags WHERE name = '{}'".format(table))
+        result = self.cursor.fetchall()
+        return len(result) > 0
+
+    def get_table_content(self, table:str) -> list:
+        '''returns list of pairs made up from strings'''
+        self.cursor.execute("SELECT path, name FROM {}".format(table))
+        return self.cursor.fetchall()
         
 
     
