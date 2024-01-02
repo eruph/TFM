@@ -10,16 +10,17 @@ class CommandShell:
         }
 
         self.operator = Operator()
-        #TODO: add operator's commands to self.commands
+        for key in self.operator.commands.keys():
+            self.commands[key] = self.operator.commands[key]
     
     def __run_interactively(self):
         ''' get user's input, then process command and print response'''
         while True:
             command = input(">>")
+            command, *arguments = command.split(" ")
             if command not in self.commands.keys():
                 print("command '{}' doesn't exist!".format(command))
             else:
-                command, *arguments = command.split(" ")
                 self.commands[command](arguments)
     def __run_cli(self):
         '''parse command line arguments, execute command and quit then'''
