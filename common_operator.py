@@ -1,23 +1,21 @@
 from base_operator import BaseOperator
 import os
-from typing import Callable, Any
+from tag_operator import TagOperator
 
 class Operator(BaseOperator):
-    '''class that provides interface to all operation that can be apllied to files/tagsx'''
+    '''class that provides interface to all operation that can be apllied to files/tags'''
     def __init__(self):
         super().__init__()
         self.commands = {
             "scan": lambda args: self.crifp(args,1,self.scan),
             "list": lambda args: self.crifp(args,1,self.list_table_content)
         }
+
+        #add tag operations
+        self.tag_ops = TagOperator().commands
+        for op in self.tag_ops.keys():
+            self.commands[op] = self.tag_ops[op]
         
-    #check and run if possible:for short 
-    def crifp(self,args:list, required_args_amount:int, fn:Callable[..., Any]) -> bool:
-        '''if len of passed arguments is equal to required one, then call function. otherwise print doc for the function'''
-        if len(args) != required_args_amount:
-            print(fn.__doc__)
-        else:
-            fn(*args)
     
     def scan(self,root: str) -> None:
         '''scan example: scan root_directory'''
