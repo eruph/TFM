@@ -44,8 +44,6 @@ class DBManager:
         self.connection.commit()
 
     def does_table_exist(self, table:str) -> bool:
-        if table == "tagless": return True#this one obviously exists 
-
         #if there is no such table None is returned.
         self.cursor.execute("SELECT name FROM tags WHERE name = '{}'".format(table))
         result = self.cursor.fetchall()

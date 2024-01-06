@@ -14,7 +14,7 @@ class CommandShell:
         for key in self.operator.commands.keys():
             self.commands[key] = self.operator.commands[key]
 
-    def __execute_if_possible(self,command,arguments):
+    def __execute_if_possible(self,command:str,arguments:list):
         if command not in self.commands.keys():
             print("command '{}' doesn't exist!".format(command))
         else:

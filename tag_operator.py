@@ -11,7 +11,7 @@ class TagOperator(BaseOperator):
     def create_new_tag(self, tag:str) -> None:
         '''new example: new tag_name'''
         if self.db.does_table_exist(tag):
-            print("{} tag is already created!")
+            print("{} tag is already created!".format(tag))
             return None
 
         self.db.create_tag(tag)
