@@ -25,7 +25,7 @@ class Operator(BaseOperator):
             print("{} doesn't exist!".format(root))
             return None
 
-        next_id = self.db.get_tagless_max()
+        next_id = self.db.get_tagless_max()+1 # add 1, since we get max value and this value is already used
 
         print_progress = lambda top, item: print("{}/{} is staged as tagless!".format(top,item))
         for top, dirs, files in os.walk(root):
