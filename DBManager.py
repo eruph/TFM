@@ -17,6 +17,15 @@ class DBManager:
     def __del__(self):
         self.connection.close()
 
+    def try_sql(fn):
+        def inner(*args, **kwargs):
+            try:
+                fn(*args,**kwargs)
+            except Exception as e:
+                print(str(e))
+        return inner
+
+    @try_sql
     def __create_special_tables(self):
         with open("sql/create_base_tables.sql","r") as f:
             #it's available to execute only one statement in one time
@@ -28,6 +37,7 @@ class DBManager:
             self.connection.commit()
         print("tfm.db has been created!")
 
+    @try_sql
     def _get_table_max(self, table:str) -> int:
         '''common function to retrieve size of table'''
         self.cursor.execute("SELECT MAX(id) FROM {}".format(table))
@@ -39,33 +49,39 @@ class DBManager:
 
     def get_tagless_max(self) -> int: return self._get_table_max("tagless")
 
+    @try_sql
     def add_tagless_item(self,id:int,path:str,name:str) -> None:
         self.cursor.execute("INSERT INTO tagless (id, path, name) VALUES({}, '{}', '{}')".format(id,path,name))
         self.connection.commit()
 
+    @try_sql
     def does_table_exist(self, table:str) -> bool:
         #if there is no such table None is returned.
         self.cursor.execute("SELECT name FROM tags WHERE name = '{}'".format(table))
         result = self.cursor.fetchall()
         return len(result) > 0
 
+    @try_sql
     def get_table_content(self, table:str) -> list:
         '''returns list of pairs made up from strings'''
         self.cursor.execute("SELECT path, name FROM {}".format(table))
         return self.cursor.fetchall()
 
-
+    @try_sql
     def create_tag(self, tag:str) -> None:
         '''create new table associated with provided tag'''
         #Note: check tag existence before creation
         self.cursor.execute(self.tag_table_req.format(tag))
         self.connection.commit()
-
+        
         #make a record there is such tag
         tags_size = self._get_table_max("tags")
-        self.cursor.execute("INSERT INTO tags (id,name,parent) VALUES({},'{}','')".format(tags_size+1,tag))
+        tags_size = 0 if tags_size is None else tags_size #fix strange issue
+        
+        self.cursor.execute("INSERT INTO tags (id,name,parent) VALUES({},'{}','None')".format(tags_size+1,tag))
         self.connection.commit()
 
+    @try_sql
     def get_tags(self) -> list:
         '''return list of strings, containg names of all existing tags'''
         self.cursor.execute("SELECT name from tags")
