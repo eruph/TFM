@@ -6,13 +6,22 @@ class CommandShell:
     def __init__(self):
         #every command is repsented with lambda that takes list of argument(even if command doesn't require any additional data)
         self.commands = {
-            "quit": lambda args: sys.exit()
+            "quit": lambda args: sys.exit(),
+            "help": lambda args: self.__help()
         }
+        self.commands["quit"].__doc__ = "quit example: quit" #simply add doc string
 
         #create common operator and add all commands to shell's available ones
         self.operator = Operator()
         for key in self.operator.commands.keys():
             self.commands[key] = self.operator.commands[key]
+
+
+    def __help(self):
+        '''print doc string for every command'''
+        for key in self.commands.keys():
+            if key != "help":
+                print(self.commands[key].__doc__)
 
     def __execute_if_possible(self,command:str,arguments:list):
         if command not in self.commands.keys():
