@@ -10,12 +10,12 @@ class Operator(BaseOperator):
             "scan": lambda args: self.crifp(args,1,self.scan),
             "list": lambda args: self.crifp(args,1,self.list_table_content)
         }
-
+        self._set_docs(self.commands)
+        
         #add tag operations
         self.tag_ops = TagOperator().commands
         for op in self.tag_ops.keys():
             self.commands[op] = self.tag_ops[op]
-        
     
     def scan(self,root: str) -> None:
         '''scan example: scan root_directory'''

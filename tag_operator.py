@@ -7,7 +7,8 @@ class TagOperator(BaseOperator):
             "new":lambda args: self.crifp(args,1,self.create_new_tag),
             "lst":lambda args: self.crifp(args,0,self.show_existing_tags)
         }
-
+        self._set_docs(self.commands)
+        
     def create_new_tag(self, tag:str) -> None:
         '''new example: new tag_name'''
         if self.db.does_table_exist(tag):
